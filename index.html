@@ -375,59 +375,63 @@ header.scrolled .nav-glass{
 }
 @media (max-width:992px){
   .dubai-card-popup img{
-    height:200px;
-    max-height:210px;
+    height:210px;
+    max-height:220px;
     border-radius:14px;
-    box-shadow:0 14px 38px rgba(0,0,0,.95), 0 0 20px rgba(255,255,255,.18);
+    box-shadow:0 16px 44px rgba(0,0,0,.95), 0 0 24px rgba(255,255,255,.2);
   }
 }
 @media (max-width:1200px){
   .hero-globe-stage{width:1200px;height:1200px;right:-410px;top:58%;transform:translateY(-38%);}
 }
 @media (max-width:992px){
-  .hero{padding:120px 24px 30px;min-height:auto;}
-  .hero-container{flex-direction:column;align-items:center;padding:0 16px;gap:20px;}
+  .hero{padding:90px 24px 0;min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;position:relative;}
+  .hero-container{flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px;position:relative;width:100%;min-height:520px;}
+  .hero-copy{position:relative;z-index:10;width:100%;}
   .hero-globe-stage{
-    position:relative;
-    right:auto;
-    left:auto;
-    top:auto;
-    transform:none;
-    width:100%;
-    max-width:480px;
-    height:420px;
-    margin:10px auto 0;
+    position:absolute;
+    left:50%;
+    top:88%;
+    transform:translate(-50%, -50%);
+    width:100vw;
+    max-width:440px;
+    height:440px;
+    margin:0;
     opacity:0.95;
+    z-index:2;
+    pointer-events:auto;
   }
+  #about{padding-top:35px;}
 }
 @media (max-width:600px){
-  .hero{padding:100px 16px 20px;min-height:auto;}
-  .hero-container{flex-direction:column;align-items:flex-start;gap:16px;padding:0;}
-  .hero-copy{max-width:100%;}
+  .hero{padding:85px 16px 0;min-height:auto;position:relative;}
+  .hero-container{min-height:500px;position:relative;}
+  .hero-copy{max-width:100%;width:100%;text-align:left;position:relative;z-index:10;}
   .hero h1{font-size:clamp(1.6rem, 6vw, 2.2rem);}
   .hero h1 .hero-line1{white-space:normal;}
   .hero p{font-size:.92rem;margin-top:14px;}
   .hero-actions{width:100%;justify-content:flex-start;margin-top:22px;}
   .hero-actions .btn{width:100%;}
   .hero-globe-stage{
-    position:relative;
-    right:auto;
-    left:auto;
-    top:auto;
-    transform:none;
-    width:100%;
-    max-width:400px;
+    position:absolute;
+    left:50%;
+    top:88%;
+    transform:translate(-50%, -50%);
+    width:100vw;
+    max-width:380px;
     height:380px;
-    margin:10px auto -15px;
+    margin:0;
     opacity:0.98;
-    animation:reveal 1.2s var(--ease) .5s forwards;
+    z-index:2;
+    pointer-events:auto;
   }
   .dubai-card-popup img{
-    height:190px;
-    max-height:200px;
+    height:200px;
+    max-height:210px;
     border-radius:14px;
-    box-shadow:0 14px 40px rgba(0,0,0,.95), 0 0 22px rgba(255,255,255,.2);
+    box-shadow:0 16px 44px rgba(0,0,0,.95), 0 0 25px rgba(255,255,255,.22);
   }
+  #about{padding-top:30px;}
 }
 @keyframes reveal{to{opacity:1;transform:none;}}
 @keyframes revealGlobe{from{opacity:0;transform:translateY(-25%);} to{opacity:1;transform:translateY(-38%);}}
@@ -1668,36 +1672,40 @@ window.addEventListener('scroll', () => {
     const isMobile = window.innerWidth <= 992;
     const targetScale = isMobile ? 1.35 : 1.85;
 
-    let currentTranslateY = isMobile ? -22 * phase1 : -38;
+    let currentTranslateY = -38;
     let currentShiftX = isMobile ? 0 : -420 * phase1;
+    let mobShiftY = 0;
 
-    if (progress <= 1) {
-      currentTranslateY = isMobile ? -22 * phase1 : -38;
-      currentShiftX = isMobile ? 0 : -420 * phase1;
-    } else if (progress <= 2) {
-      // Stage 2 (Dubai)
-      const p = progress - 1;
-      const mobY = -22 - p * 4; // -22% -> -26%
-      currentTranslateY = isMobile ? mobY : -38 + p * (-32 - (-38));
-      currentShiftX = isMobile ? 0 : -420 + p * (-270 - (-420));
-    } else if (progress <= 3) {
-      // Stage 3 (Singapore)
-      const p = progress - 2;
-      const startY = isMobile ? -26 : -32;
-      const targetY = isMobile ? -24 : -38;
-      currentTranslateY = startY + p * (targetY - startY);
-      currentShiftX = isMobile ? 0 : -270 + p * (-140 - (-270));
+    if (isMobile) {
+      mobShiftY = -90 * Math.min(1, progress);
     } else {
-      // Stage 4 (Tokyo)
-      const p = Math.min(1, progress - 3);
-      const startY = isMobile ? -24 : -38;
-      const targetY = isMobile ? -22 : -35;
-      currentTranslateY = startY + p * (targetY - startY);
-      currentShiftX = isMobile ? 0 : -140 + p * (0 - (-140));
+      if (progress <= 1) {
+        currentTranslateY = -38;
+        currentShiftX = -420 * phase1;
+      } else if (progress <= 2) {
+        // Stage 2 (Dubai)
+        const p = progress - 1;
+        currentTranslateY = -38 + p * (-32 - (-38));
+        currentShiftX = -420 + p * (-270 - (-420));
+      } else if (progress <= 3) {
+        // Stage 3 (Singapore)
+        const p = progress - 2;
+        currentTranslateY = -32 + p * (-38 - (-32));
+        currentShiftX = -270 + p * (-140 - (-270));
+      } else {
+        // Stage 4 (Tokyo)
+        const p = Math.min(1, progress - 3);
+        currentTranslateY = -38 + p * (-35 - (-38));
+        currentShiftX = -140 + p * (0 - (-140));
+      }
     }
 
-    const currentScale = 1 + phase1 * (targetScale - 1);
-    stage.style.transform = `translateY(${currentTranslateY}%) translateX(${currentShiftX}px) scale(${currentScale})`;
+    const currentScale = isMobile ? (0.58 + phase1 * (1.35 - 0.58)) : (1 + phase1 * (targetScale - 1));
+    if (isMobile) {
+      stage.style.transform = `translate(-50%, calc(-50% + ${mobShiftY}px)) scale(${currentScale})`;
+    } else {
+      stage.style.transform = `translateY(${currentTranslateY}%) translateX(${currentShiftX}px) scale(${currentScale})`;
+    }
 
     // 3. Card Popups (Dubai 22.png, Singapore 3.png, Tokyo 4.png)
     const dubaiPopup = document.getElementById('dubaiCardPopup');
@@ -2265,7 +2273,7 @@ function init3DGlobe() {
     const h = container.clientHeight || 1400;
     const isMobile = window.innerWidth <= 992;
     if (isMobile) {
-      camera.position.z = 7.5;
+      camera.position.z = 6.4;
     } else {
       camera.position.z = 6.4 * (h / 680);
     }
@@ -2620,4 +2628,3 @@ if (document.readyState === 'complete') {
 </script>
 </body>
 </html>
- 
